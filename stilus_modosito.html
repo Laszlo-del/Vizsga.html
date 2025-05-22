@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <title>HTML Tartalom Stílus Módosító</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    label {
+      display: inline-block;
+      width: 130px;
+      margin-top: 8px;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      font-family: monospace;
+      margin-bottom: 15px;
+      padding: 8px;
+      resize: vertical;
+    }
+    input[type="text"], input[type="number"] {
+      padding: 5px;
+      width: 220px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 8px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #megjelenito {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-top: 20px;
+      background: white;
+      min-height: 150px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>HTML Tartalom Stílus Módosító</h1>
+
+  <label for="htmlInput">HTML kód beillesztése:</label><br />
+  <textarea id="htmlInput" placeholder="Ide másold be a módosítandó HTML kódot..."></textarea><br />
+
+  <button onclick="megjelenit()">HTML betöltése és megnyitása új ablakban</button>
+
+  <hr />
+
+  <h2>Stílus beállítások</h2>
+
+  <label for="szovegSzin">Szöveg színe:</label>
+  <input type="text" id="szovegSzin" placeholder="pl. piros, fekete" /><br />
+
+  <label for="hatterSzin">Háttér színe:</label>
+  <input type="text" id="hatterSzin" placeholder="pl. sárga, fehér" /><br />
+
+  <label for="betuMeret">Betűméret (px):</label>
+  <input type="number" id="betuMeret" placeholder="pl. 18" /><br />
+
+  <button onclick="modosit()">Stílus alkalmazása</button>
+
+  <div id="megjelenito">
+    <!-- Ide töltjük be a HTML-t -->
+  </div>
+
+<script>
+  const magyarSzinnevek = {
+    "piros": "red",
+    "kék": "blue",
+    "zöld": "green",
+    "sárga": "yellow",
+    "fekete": "black",
+    "fehér": "white",
+    "szürke": "gray",
+    "narancs": "orange",
+    "rózsaszín": "pink",
+    "lila": "purple",
+    "barna": "brown",
+    "világoskék": "lightblue",
+    "világoszöld": "lightgreen"
+  };
+
+  let ujAblak = null;
+
+  function megjelenit() {
+    const htmlKod = document.getElementById("htmlInput").value;
+    const megjelenito = document.getElementById("megjelenito");
+    megjelenito.innerHTML = htmlKod;
+
+    // Új ablak/fül megnyitása, ha még nincs nyitva
+    if (!ujAblak || ujAblak.closed) {
+      ujAblak = window.open("", "_blank", "width=800,height=600");
+    }
+    // A megnyitott ablak tartalmának felülírása a beírt HTML-lel
+    ujAblak.document.open();
+    ujAblak.document.write(htmlKod);
+    ujAblak.document.close();
+  }
+
+  function modosit() {
+    const szovegSzinInput = document.getElementById("szovegSzin").value.trim().toLowerCase();
+    const hatterSzinInput = document.getElementById("hatterSzin").value.trim().toLowerCase();
+    const betuMeretInput = document.getElementById("betuMeret").value.trim();
+
+    const szovegSzin = magyarSzinnevek[szovegSzinInput] || szovegSzinInput;
+    const hatterSzin = magyarSzinnevek[hatterSzinInput] || hatterSzinInput;
+
+    const megjelenito = document.getElementById("megjelenito");
+
+    if (szovegSzin) megjelenito.style.color = szovegSzin;
+    if (hatterSzin) megjelenito.style.backgroundColor = hatterSzin;
+    if (betuMeretInput) megjelenito.style.fontSize = betuMeretInput + "px";
+
+    // Ha nyitva van az új ablak, a stílust oda is alkalmazzuk (egyszerűsített megoldás)
+    if (ujAblak && !ujAblak.closed) {
+      let style = "";
+      if (szovegSzin) style += `color: ${szovegSzin};`;
+      if (hatterSzin) style += `background-color: ${hatterSzin};`;
+      if (betuMeretInput) style += `font-size: ${betuMeretInput}px;`;
+      ujAblak.document.body.style = style;
+    }
+  }
+</script>
+
+</body>
+</html>
