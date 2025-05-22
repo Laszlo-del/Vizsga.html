@@ -7,11 +7,11 @@
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
-      background-color: #f9f9f9;
+      background-color: #f0f0f0;
     }
     label {
       display: inline-block;
-      width: 130px;
+      width: 220px;
       margin-top: 8px;
     }
     textarea {
@@ -22,9 +22,9 @@
       padding: 8px;
       resize: vertical;
     }
-    input[type="text"], input[type="number"] {
+    input[type="number"], select {
       padding: 5px;
-      width: 220px;
+      width: 180px;
     }
     button {
       margin-top: 15px;
@@ -44,89 +44,137 @@
 <body>
 
   <h1>HTML Tartalom Stílus Módosító</h1>
+  <p><em>Készítette: Schmidt László Zsolt</em></p>
 
   <label for="htmlInput">HTML kód beillesztése:</label><br />
   <textarea id="htmlInput" placeholder="Ide másold be a módosítandó HTML kódot..."></textarea><br />
 
-  <button onclick="megjelenit()">HTML betöltése és megnyitása új ablakban</button>
+  <button onclick="megjelenit()">Betöltés és új ablak megnyitása</button>
 
   <hr />
+  <h2>Stílusbeállítások</h2>
 
-  <h2>Stílus beállítások</h2>
+  <h3>Címsorok (h1–h6)</h3>
+  <label for="cimsorSzin">Szín:</label>
+  <select id="cimsorSzin">
+    <option value="">-- Válassz színt --</option>
+    <option value="black">Fekete</option>
+    <option value="red">Piros</option>
+    <option value="blue">Kék</option>
+    <option value="green">Zöld</option>
+    <option value="orange">Narancs</option>
+    <option value="purple">Lila</option>
+    <option value="darkred">Sötétpiros</option>
+    <option value="navy">Tengerkék</option>
+  </select><br />
+  <label for="cimsorMeret">Méret (px):</label>
+  <input type="number" id="cimsorMeret" /><br />
+  <label for="cimsorIgazitas">Igazítás:</label>
+  <select id="cimsorIgazitas">
+    <option value="">-- Válassz --</option>
+    <option value="left">Balra</option>
+    <option value="center">Középre</option>
+    <option value="right">Jobbra</option>
+  </select><br />
 
-  <label for="szovegSzin">Szöveg színe:</label>
-  <input type="text" id="szovegSzin" placeholder="pl. piros, fekete" /><br />
+  <h3>Szöveg (p, li)</h3>
+  <label for="szovegSzin">Szín:</label>
+  <select id="szovegSzin">
+    <option value="">-- Válassz színt --</option>
+    <option value="black">Fekete</option>
+    <option value="gray">Szürke</option>
+    <option value="brown">Barna</option>
+    <option value="darkblue">Sötétkék</option>
+    <option value="teal">Pávakék</option>
+    <option value="maroon">Bordó</option>
+    <option value="olive">Olívazöld</option>
+  </select><br />
+  <label for="szovegMeret">Méret (px):</label>
+  <input type="number" id="szovegMeret" /><br />
+  <label for="szovegIgazitas">Igazítás:</label>
+  <select id="szovegIgazitas">
+    <option value="">-- Válassz --</option>
+    <option value="left">Balra</option>
+    <option value="center">Középre</option>
+    <option value="right">Jobbra</option>
+  </select><br />
 
+  <h3>Háttér</h3>
   <label for="hatterSzin">Háttér színe:</label>
-  <input type="text" id="hatterSzin" placeholder="pl. sárga, fehér" /><br />
-
-  <label for="betuMeret">Betűméret (px):</label>
-  <input type="number" id="betuMeret" placeholder="pl. 18" /><br />
+  <select id="hatterSzin">
+    <option value="">-- Válassz színt --</option>
+    <option value="white">Fehér</option>
+    <option value="lightyellow">Világossárga</option>
+    <option value="lightgray">Világosszürke</option>
+    <option value="beige">Bézs</option>
+    <option value="lightblue">Világoskék</option>
+    <option value="lavender">Levendula</option>
+    <option value="mintcream">Mentás</option>
+  </select><br />
 
   <button onclick="modosit()">Stílus alkalmazása</button>
 
-  <div id="megjelenito">
-    <!-- Ide töltjük be a HTML-t -->
-  </div>
+  <div id="megjelenito"></div>
 
-<script>
-  const magyarSzinnevek = {
-    "piros": "red",
-    "kék": "blue",
-    "zöld": "green",
-    "sárga": "yellow",
-    "fekete": "black",
-    "fehér": "white",
-    "szürke": "gray",
-    "narancs": "orange",
-    "rózsaszín": "pink",
-    "lila": "purple",
-    "barna": "brown",
-    "világoskék": "lightblue",
-    "világoszöld": "lightgreen"
-  };
+  <script>
+    let ujAblak = null;
 
-  let ujAblak = null;
+    function megjelenit() {
+      const htmlKod = document.getElementById("htmlInput").value;
+      const megjelenito = document.getElementById("megjelenito");
+      megjelenito.innerHTML = htmlKod;
 
-  function megjelenit() {
-    const htmlKod = document.getElementById("htmlInput").value;
-    const megjelenito = document.getElementById("megjelenito");
-    megjelenito.innerHTML = htmlKod;
-
-    // Új ablak/fül megnyitása, ha még nincs nyitva
-    if (!ujAblak || ujAblak.closed) {
-      ujAblak = window.open("", "_blank", "width=800,height=600");
+      if (!ujAblak || ujAblak.closed) {
+        ujAblak = window.open("", "_blank", "width=800,height=600");
+      }
+      ujAblak.document.open();
+      ujAblak.document.write(htmlKod);
+      ujAblak.document.close();
     }
-    // A megnyitott ablak tartalmának felülírása a beírt HTML-lel
-    ujAblak.document.open();
-    ujAblak.document.write(htmlKod);
-    ujAblak.document.close();
-  }
 
-  function modosit() {
-    const szovegSzinInput = document.getElementById("szovegSzin").value.trim().toLowerCase();
-    const hatterSzinInput = document.getElementById("hatterSzin").value.trim().toLowerCase();
-    const betuMeretInput = document.getElementById("betuMeret").value.trim();
+    function modosit() {
+      const cimsorSzin = document.getElementById("cimsorSzin").value;
+      const cimsorMeret = document.getElementById("cimsorMeret").value;
+      const cimsorIgazitas = document.getElementById("cimsorIgazitas").value;
 
-    const szovegSzin = magyarSzinnevek[szovegSzinInput] || szovegSzinInput;
-    const hatterSzin = magyarSzinnevek[hatterSzinInput] || hatterSzinInput;
+      const szovegSzin = document.getElementById("szovegSzin").value;
+      const szovegMeret = document.getElementById("szovegMeret").value;
+      const szovegIgazitas = document.getElementById("szovegIgazitas").value;
 
-    const megjelenito = document.getElementById("megjelenito");
+      const hatterSzin = document.getElementById("hatterSzin").value;
 
-    if (szovegSzin) megjelenito.style.color = szovegSzin;
-    if (hatterSzin) megjelenito.style.backgroundColor = hatterSzin;
-    if (betuMeretInput) megjelenito.style.fontSize = betuMeretInput + "px";
+      const megjelenito = document.getElementById("megjelenito");
 
-    // Ha nyitva van az új ablak, a stílust oda is alkalmazzuk (egyszerűsített megoldás)
-    if (ujAblak && !ujAblak.closed) {
-      let style = "";
-      if (szovegSzin) style += `color: ${szovegSzin};`;
-      if (hatterSzin) style += `background-color: ${hatterSzin};`;
-      if (betuMeretInput) style += `font-size: ${betuMeretInput}px;`;
-      ujAblak.document.body.style = style;
+      if (hatterSzin) megjelenito.style.backgroundColor = hatterSzin;
+
+      megjelenito.querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(el => {
+        if (cimsorSzin) el.style.color = cimsorSzin;
+        if (cimsorMeret) el.style.fontSize = cimsorMeret + "px";
+        if (cimsorIgazitas) el.style.textAlign = cimsorIgazitas;
+      });
+
+      megjelenito.querySelectorAll("p, li").forEach(el => {
+        if (szovegSzin) el.style.color = szovegSzin;
+        if (szovegMeret) el.style.fontSize = szovegMeret + "px";
+        if (szovegIgazitas) el.style.textAlign = szovegIgazitas;
+      });
+
+      if (ujAblak && !ujAblak.closed) {
+        ujAblak.document.body.style.backgroundColor = hatterSzin || "white";
+        ujAblak.document.querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(el => {
+          if (cimsorSzin) el.style.color = cimsorSzin;
+          if (cimsorMeret) el.style.fontSize = cimsorMeret + "px";
+          if (cimsorIgazitas) el.style.textAlign = cimsorIgazitas;
+        });
+        ujAblak.document.querySelectorAll("p, li").forEach(el => {
+          if (szovegSzin) el.style.color = szovegSzin;
+          if (szovegMeret) el.style.fontSize = szovegMeret + "px";
+          if (szovegIgazitas) el.style.textAlign = szovegIgazitas;
+        });
+      }
     }
-  }
-</script>
+  </script>
 
 </body>
 </html>
+
